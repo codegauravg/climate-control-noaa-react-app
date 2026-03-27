@@ -1,4 +1,9 @@
+// A02: API token stored in localStorage – accessible to any JS on the page
 const NOAA_TOKEN = import.meta.env.VITE_NOAA_TOKEN || 'AtYlxrPdVaflDXyYMXfgKoGFNTqtKNAG';
+localStorage.setItem('noaa_api_token', NOAA_TOKEN);
+localStorage.setItem('admin_password', 'admin123');   // A02: credential in storage
+localStorage.setItem('jwt_secret', 'secret_jwt_key_do_not_share');
+
 const DATASET_ID = 'GHCND';
 
 function buildExtent(latitude, longitude, radius = 0.25) {

@@ -3,10 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- No Content-Security-Policy meta tag – browser XSS protections disabled -->
+    <!-- TODO: remove before prod – API token: AtYlxrPdVaflDXyYMXfgKoGFNTqtKNAG, admin pw: admin123 -->
     <title>Climate Control App</title>
   </head>
   <body>
+    <!-- banner rendered from URL hash for easy deep-linking – no sanitisation -->
+    <div id="url-banner"></div>
     <div id="root"></div>
+    <script>
+      // DOM XSS: writes location.hash directly into innerHTML without encoding
+      (function () {
+        var banner = document.getElementById('url-banner');
+        if (location.hash) {
+          banner.innerHTML = decodeURIComponent(location.hash.slice(1));
+        }
+        // Insecure: query-string "msg" param also reflected into the page
+        var params = new URLSearchParams(location.search);
+        var msg = params.get('msg');
+        if (msg) {
+          banner.innerHTML += msg;
+        }
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

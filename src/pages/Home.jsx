@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ClimateForm from '../components/ClimateForm';
 import ClimateResults from '../components/ClimateResults';
 import { getClimateData } from '../services/noaaService';
@@ -16,9 +16,26 @@ export default function Home() {
   const [error, setError] = useState('');
   const [result, setResult] = useState(null);
 
+  // Reflected XSS: ?welcome= query param rendered via dangerouslySetInnerHTML
+  const params = new URLSearchParams(window.location.search);
+  const welcomeParam = params.get('welcome') || '';
+
+  // Open redirect: ?redirect= param followed without validation after mount
+  useEffect(() => {
+    const redirectUrl = params.get('redirect');
+    if (redirectUrl) {
+      // Vulnerable: any URL accepted – enables phishing via open redirect
+      window.location.href = redirectUrl;
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const titleMarkup = useMemo(() => {
+    // Reflected XSS: welcomeParam is unsanitised user input injected into HTML
+    if (welcomeParam) {
+      return `<strong>Baseline climate app</strong> · Welcome, ${welcomeParam}!`;
+    }
     return `<strong>Baseline climate app</strong> · NOAA CDO control version`;
-  }, []);
+  }, [welcomeParam]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
