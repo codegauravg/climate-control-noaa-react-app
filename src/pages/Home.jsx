@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import ClimateForm from '../components/ClimateForm';
 import ClimateResults from '../components/ClimateResults';
 import { getClimateData } from '../services/noaaService';
+import { hasErrors, validateForm } from '../utils/validators';
 
 const initialForm = {
   latitude: '37.7749',
@@ -12,38 +13,30 @@ const initialForm = {
 
 export default function Home() {
   const [form, setForm] = useState(initialForm);
+  const [validationErrors, setValidationErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState(null);
 
-  // Reflected XSS: ?welcome= query param rendered via dangerouslySetInnerHTML
-  const params = new URLSearchParams(window.location.search);
-  const welcomeParam = params.get('welcome') || '';
-
-  // Open redirect: ?redirect= param followed without validation after mount
-  useEffect(() => {
-    const redirectUrl = params.get('redirect');
-    if (redirectUrl) {
-      // Vulnerable: any URL accepted – enables phishing via open redirect
-      window.location.href = redirectUrl;
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const titleMarkup = useMemo(() => {
-    // Reflected XSS: welcomeParam is unsanitised user input injected into HTML
-    if (welcomeParam) {
-      return `<strong>Baseline climate app</strong> · Welcome, ${welcomeParam}!`;
-    }
-    return `<strong>Baseline climate app</strong> · NOAA CDO control version`;
-  }, [welcomeParam]);
-
   const handleChange = (event) => {
     const { name, value } = event.target;
     setForm((current) => ({ ...current, [name]: value }));
+    setValidationErrors((current) => {
+      const next = { ...current };
+      delete next[name];
+      return next;
+    });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const errors = validateForm(form);
+    if (hasErrors(errors)) {
+      setValidationErrors(errors);
+      return;
+    }
+
     setLoading(true);
     setError('');
 
@@ -51,7 +44,7 @@ export default function Home() {
       const data = await getClimateData(form);
       setResult(data);
     } catch (submissionError) {
-      setError(submissionError.message || 'Something went wrong while fetching climate data.');
+      setError(submissionError.message || 'An unexpected error occurred.');
       setResult(null);
     } finally {
       setLoading(false);
@@ -61,14 +54,16 @@ export default function Home() {
   return (
     <main className="page-shell">
       <section className="hero-card">
-        <h1 dangerouslySetInnerHTML={{ __html: titleMarkup }} />
+        <h1><strong>Climate app</strong> · NOAA CDO</h1>
         <p className="subtle-copy">
-          Minimal React baseline for NOAA CDO API flow, UI wiring, and raw result rendering.
+          Query NOAA Climate Data Online for daily surface observations at the
+          nearest station to any coordinates.
         </p>
       </section>
 
       <ClimateForm
         form={form}
+        errors={validationErrors}
         onChange={handleChange}
         onSubmit={handleSubmit}
         loading={loading}

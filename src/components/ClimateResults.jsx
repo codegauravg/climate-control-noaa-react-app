@@ -1,4 +1,4 @@
-import { formatClimatePayload, formatStationSummary } from '../utils/formatters';
+import { formatStationSummary } from '../utils/formatters';
 
 export default function ClimateResults({ loading, error, result }) {
   if (loading) {
@@ -29,7 +29,6 @@ export default function ClimateResults({ loading, error, result }) {
   }
 
   const stationSummary = formatStationSummary(result.station);
-  const rawHtml = formatClimatePayload(result);
 
   return (
     <section className="card">
@@ -45,11 +44,14 @@ export default function ClimateResults({ loading, error, result }) {
         </div>
         <div>
           <span className="label">Record count</span>
-          <strong>{result.data?.results?.length || 0}</strong>
+          <strong>{result.data?.results?.length ?? 0}</strong>
         </div>
       </div>
 
-      <div className="raw-render-block" dangerouslySetInnerHTML={{ __html: rawHtml }} />
+      <div className="raw-render-block">
+        <h3>Raw NOAA payload — {stationSummary}</h3>
+        <pre>{JSON.stringify(result, null, 2)}</pre>
+      </div>
     </section>
   );
 }

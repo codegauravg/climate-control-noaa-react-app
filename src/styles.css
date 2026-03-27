@@ -112,3 +112,14 @@ input {
 .error-card {
   border: 1px solid #f3b9b9;
 }
+
+.field-error {
+  color: #c0392b;
+  font-size: 0.82rem;
+  margin-top: -4px;
+}
+
+input[aria-invalid='true'] {
+  border-color: #c0392b;
+  background: #fff8f8;
+}
