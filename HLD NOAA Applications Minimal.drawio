@@ -1,0 +1,37 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36" version="29.6.6">
+  <diagram name="Page-1" id="5c8kVN73PSW_v6VSMSGX">
+    <mxGraphModel dx="1019" dy="555" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=13;" value="&lt;b&gt;Climate Control NOAA Applications — High-Level Architecture&lt;/b&gt;&lt;br&gt;Vue 3 vs React 18" vertex="1">
+          <mxGeometry height="35" width="1020" x="10" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=13;align=center;" value="USER / BROWSER" vertex="1">
+          <mxGeometry height="40" width="1020" x="10" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=11;align=left;verticalAlign=top;spacingLeft=14;spacingTop=12;spacingRight=10;" value="&lt;b&gt;Vue3 Climate Control App&lt;/b&gt;&lt;br&gt;Vite · Vue 3 · Pinia · Vue Router 4&lt;br&gt;&amp;nbsp;&lt;br&gt;&lt;b&gt;Presentation:&lt;/b&gt;  App.vue → AppHeader + HomeView → 4 child components&lt;br&gt;&lt;b&gt;State:&lt;/b&gt;           Pinia Store (useClimateStore)&lt;br&gt;&lt;b&gt;Logic:&lt;/b&gt;           Composable — useClimateSearch.js&lt;br&gt;&lt;b&gt;Router:&lt;/b&gt;          Vue Router 4 — / → HomeView.vue&lt;br&gt;&lt;b&gt;Service:&lt;/b&gt;         noaaService.js — 15s timeout · direct fetch&lt;br&gt;&lt;b&gt;Utilities:&lt;/b&gt;       validators.js | formatters.js | domUtils.js&lt;br&gt;&lt;b&gt;Security:&lt;/b&gt;        CSP · X-Frame-Options · Input Whitelist · Token via .env&lt;br&gt;&lt;b&gt;Build:&lt;/b&gt;           Vite | vite.config.mjs | Port 5173" vertex="1">
+          <mxGeometry height="295" width="490" x="10" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=11;align=left;verticalAlign=top;spacingLeft=14;spacingTop=12;spacingRight=10;" value="&lt;b&gt;React Climate Control App&lt;/b&gt;&lt;br&gt;Vite · React 18 · useState (Local)&lt;br&gt;&amp;nbsp;&lt;br&gt;&lt;b&gt;Presentation:&lt;/b&gt;  App.jsx → Home.jsx → ClimateForm | ClimateResults&lt;br&gt;&lt;b&gt;State:&lt;/b&gt;           React useState — local in Home.jsx (no Redux)&lt;br&gt;&lt;b&gt;Logic:&lt;/b&gt;           Co-located in Home.jsx — handleChange | handleSubmit&lt;br&gt;&lt;b&gt;Router:&lt;/b&gt;          None — single component SPA&lt;br&gt;&lt;b&gt;Service:&lt;/b&gt;         noaaService.js — 10s timeout · /api/noaa proxy&lt;br&gt;&lt;b&gt;Utilities:&lt;/b&gt;       validators.js | formatters.js&lt;br&gt;&lt;b&gt;Security:&lt;/b&gt;        CSP · X-Frame-Options · Input Validation · CORS Proxy&lt;br&gt;&lt;b&gt;Build:&lt;/b&gt;           Vite | vite.config.js | API Proxy config" vertex="1">
+          <mxGeometry height="295" width="490" x="530" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=12;align=center;" value="&lt;b&gt;NOAA Climate Data Online (CDO) API v2&lt;/b&gt;&lt;br&gt;ncei.noaa.gov/cdo-web/api/v2 · /stations · /data · Token-based Auth · JSON responses" vertex="1">
+          <mxGeometry height="65" width="630" x="205" y="455" as="geometry" />
+        </mxCell>
+        <mxCell id="7" edge="1" parent="1" source="3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=9;" target="4" value="renders">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="8" edge="1" parent="1" source="3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=9;" target="5" value="renders">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="9" edge="1" parent="1" source="4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=0.3;exitY=1;exitDx=0;exitDy=0;entryX=0.2;entryY=0;entryDx=0;entryDy=0;fontSize=9;strokeColor=#82b366;fontColor=#82b366;" target="6" value="HTTPS + Token">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="10" edge="1" parent="1" source="5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=0.7;exitY=1;exitDx=0;exitDy=0;entryX=0.8;entryY=0;entryDx=0;entryDy=0;fontSize=9;strokeColor=#6c8ebf;fontColor=#6c8ebf;" target="6" value="HTTPS + Token (via Proxy)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
